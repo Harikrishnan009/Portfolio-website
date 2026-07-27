@@ -1,36 +1,7 @@
 "use client";
-
-import { useState } from "react";
-import { Copy, Check } from "lucide-react";
-
-const CONTACT = { email: "harikrishnan.k.p055@gmail.com", phone: "+91 9544498047", linkedin: "HARIKRISHNAN K.P" };
-
-function Row({ label, value, href }: { label: string; value: string; href?: string }) {
-  const [copied, setCopied] = useState(false);
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
-    } catch {}
-  };
-  return (
-    <div className={`copy-row group relative flex items-center justify-between gap-4 border-b border-line py-5 first:pt-0 ${copied ? "copy-complete" : ""}`}>
-      <div><p className="text-[12px] text-muted">{label}</p>{href ? <a href={href} className="focus-ring mt-1 block text-[16px] text-ink underline decoration-transparent underline-offset-4 transition-colors hover:decoration-line">{value}</a> : <p className="mt-1 text-[16px] text-ink">{value}</p>}</div>
-      <span className="copy-packet" aria-hidden="true" />
-      <button onClick={handleCopy} aria-label={`Copy ${label}`} className="focus-ring relative rounded-full p-2 text-muted transition-all duration-150 hover:text-ink active:scale-90">
-        {copied ? <span className="flex items-center gap-1 font-mono text-[10px]" style={{ color: "var(--accent)" }}><Check size={15} strokeWidth={1.5}/>copied</span> : <Copy size={15} strokeWidth={1.5}/>} 
-      </button>
-    </div>
-  );
-}
-
-export default function Contact() {
-  return <section id="contact" className="border-t border-line"><div className="mx-auto max-w-content px-6 py-20 md:px-8">
-    <p className="font-display text-[15px] italic text-muted">Contact</p>
-    <h2 className="mt-3 max-w-lg font-display text-2xl font-medium leading-snug tracking-tight text-ink">Open to data engineering roles &amp; collaborations</h2>
-    <p className="mt-3 max-w-md text-[14px] leading-relaxed text-muted">Reach out directly — happy to talk about pipelines, streaming systems, or your next migration headache.</p>
-    <div className="mt-10 max-w-md"><Row label="Email" value={CONTACT.email} href={`mailto:${CONTACT.email}`}/><Row label="Phone" value={CONTACT.phone} href={`tel:${CONTACT.phone.replace(/\s/g, "")}`}/><Row label="LinkedIn" value={CONTACT.linkedin}/></div>
-    <p className="mt-16 text-[12px] text-muted">Built with Next.js · Deployed on Vercel</p>
-  </div></section>;
-}
+import {useEffect,useRef,useState} from "react";
+import {Mail,Phone,Linkedin,Copy,Check,ExternalLink} from "lucide-react";
+const CONTACT={email:"harikrishnan.k.p055@gmail.com",phone:"+91 9544498047",linkedin:"HARIKRISHNAN K.P"};
+const linkedInUrl="https://www.linkedin.com/in/harikrishnan-k-p";
+function Card({kind,label,value,href,index}:{kind:"mail"|"phone"|"linkedin";label:string;value:string;href:string;index:number}){const[copied,setCopied]=useState(false);const Icon=kind==="mail"?Mail:kind==="phone"?Phone:Linkedin;const copy=async()=>{try{await navigator.clipboard.writeText(value);setCopied(true);setTimeout(()=>setCopied(false),1800)}catch{}};return <div className="contact-card" style={{"--contact-delay":`${index*160}ms`} as React.CSSProperties}><div className="contact-icon-wrap">{Array.from({length:8},(_,i)=><i key={i} className={`contact-speck speck-${i}`}/>)}<Icon size={22} strokeWidth={1.4}/></div><div className="min-w-0 flex-1"><p className="text-[11px] uppercase tracking-[.12em] text-muted">{label}</p><a href={href} target={kind==="linkedin"?"_blank":undefined} rel={kind==="linkedin"?"noreferrer":undefined} className="mt-1 block truncate text-[15px] text-ink">{value}</a></div><span className="copy-packet"/>{kind==="linkedin"?<a href={href} target="_blank" rel="noreferrer" className="contact-action focus-ring" aria-label="Open LinkedIn"><ExternalLink size={15}/></a>:<button onClick={copy} className="contact-action focus-ring" aria-label={`Copy ${label}`}>{copied?<span className="flex items-center gap-1 font-mono text-[9px]" style={{color:"var(--accent)"}}><Check size={15}/>copied</span>:<Copy size={15}/>}</button>}</div>}
+export default function Contact(){const[live,setLive]=useState(false);const ref=useRef<HTMLElement>(null);useEffect(()=>{if(!ref.current)return;const o=new IntersectionObserver(([e])=>{if(e.isIntersecting){setLive(true);o.disconnect()}},{threshold:.22});o.observe(ref.current);return()=>o.disconnect()},[]);return <section ref={ref} id="contact" className={`contact-section border-t border-line ${live?"contact-live":""}`}><div className="mx-auto max-w-content px-6 py-20 md:px-8"><p className="font-display text-[15px] italic text-muted">Contact</p><h2 className="mt-3 max-w-lg font-display text-2xl font-medium leading-snug tracking-tight text-ink">Open to data engineering roles &amp; collaborations</h2><p className="mt-3 max-w-md text-[14px] leading-relaxed text-muted">Reach out directly — happy to talk about pipelines, streaming systems, or your next migration headache.</p><div className="contact-grid mt-10"><Card kind="mail" label="Email" value={CONTACT.email} href={`mailto:${CONTACT.email}`} index={0}/><Card kind="phone" label="Phone" value={CONTACT.phone} href={`tel:${CONTACT.phone.replace(/\s/g,"")}`} index={1}/><Card kind="linkedin" label="LinkedIn" value={CONTACT.linkedin} href={linkedInUrl} index={2}/></div><div className="contact-terminal mt-9 font-mono text-[10px] text-muted"><span className="terminal-dot"/> pipeline destination ready · choose a channel</div><p className="mt-16 text-[12px] text-muted">Built with Next.js · Deployed on Vercel</p></div></section>}
