@@ -1,0 +1,42 @@
+const entries = [
+  { title: "AWS Cloud Practitioner", detail: "Infosys-certified" },
+  { title: "Google Cloud — DevOps Essentials", detail: "Google Cloud training" },
+  { title: "Google Cloud — Cloud Architecture", detail: "Google Cloud training" },
+  { title: "Google Cloud — Cloud Engineering", detail: "Google Cloud training" },
+  { title: "Kubernetes in Google Cloud", detail: "Google Cloud training" },
+  { title: "Networking Fundamentals in Google Cloud", detail: "Google Cloud training" },
+  { title: "Baseline Infrastructure & Google Cloud Essentials", detail: "Google Cloud training" },
+];
+
+export default function Certifications() {
+  return (
+    <section id="certs" className="border-t border-line">
+      <div className="mx-auto max-w-content px-6 py-20 md:px-8">
+        <p className="font-display text-[15px] italic text-muted">Certifications</p>
+        <h2 className="mt-3 font-display text-2xl font-medium leading-snug tracking-tight text-ink">
+          Completed & verified
+        </h2>
+
+        <div className="mt-10 grid gap-10 md:grid-cols-5 md:gap-16">
+          <ul className="divide-y divide-line border-t border-line md:col-span-3">
+            {entries.map((entry) => (
+              <li key={entry.title} className="flex items-baseline justify-between gap-4 py-3.5">
+                <span className="text-[14px] text-ink">{entry.title}</span>
+                <span className="whitespace-nowrap text-[12px] text-muted">{entry.detail}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div className="md:col-span-2 md:border-l md:border-line md:pl-10">
+            <p className="font-display text-[13px] italic text-muted">Award</p>
+            <p className="mt-2 text-[14px] text-ink">Automation initiative</p>
+            <p className="mt-2 text-[13px] leading-relaxed text-muted">
+              Recognized for an automation initiative that reduced AWS costs by up to{" "}
+              <span style={{ color: "var(--accent)" }}>40%</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
